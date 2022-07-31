@@ -7,16 +7,14 @@ class Evaluate:
   """
     # Write your code here
 
-
-  def _init_(self, size):
+  def __init__(self, size):
     """Inits Evaluate with top, size_of_stack and stack.
     Arguments:
       size_of_stack: An integer to set the size of stack.
     """
     self.top = -1
-    self.size_of_stack = size
-    self.stack = []
-
+    self.size = size
+    self.lst = [None]*size
 
   def isEmpty(self):
     """
@@ -24,11 +22,18 @@ class Evaluate:
     Returns:
       True if it is empty, else returns False.
     """
-      # Write your code here
-    if len(self.stack) == 0:
-        return True
-    else:
-
+    # Write your code here
+    if self.top == -1:
+       return 1
+    else :
+       return 0
+          
+  def is_full(self):
+    # Write code here
+    if self.top == (self.size - 1):
+      return 1
+    else :
+      return 0
 
   def pop(self):
     """
@@ -37,10 +42,11 @@ class Evaluate:
       The data which is popped out if the stack is not empty.
     """
     # Write your code here
-    if len(self.stack) > 0:
-        x = self.stack.pop()
-        return x
-
+    if not self.isEmpty():
+      t=self.lst[self.top]
+      del self.lst[self.top]
+      self.top-=1
+      return t
 
   def push(self, operand):
     """
@@ -49,8 +55,9 @@ class Evaluate:
       operand: The operand to be pushed.
     """
     # Write your code here
-    self.stack.append(operand)
-
+    if not self.is_full():
+            self.top+=1
+            self.lst[self.top]=operand
 
   def validate_postfix_expression(self, expression):
     """
@@ -61,18 +68,17 @@ class Evaluate:
       True if the expression is valid, else returns False.
     """
     # Write your code here
-    value = True
-    
-    valid = ['+','-','*','/']
-    
-    for char in expression:
-        if char.isdigit or char in valid:
-            continue
-        else:
-            value = False
-    
-    return value
-
+    c1=0
+    c2=0
+    for i in expression:
+      if i.isdigit():
+        c1+=1
+      else:
+        c2+=1
+    if c1>c2 and expression[0].isdigit() and expression[1].isdigit():
+      return 1
+    else:
+      return 0
 
   def evaluate_postfix_expression(self, expression):
     """
@@ -82,29 +88,18 @@ class Evaluate:
     Returns:
       The result of evaluated postfix expression.
     """
-    
     # Write your code here
-    
-    for char in expression:
-        if char.isdigit():
-            self.push(char)
+    for i in expression:
+      if i.isdigit():
+        self.push(i)
+      else:
+        v1 = self.pop()
+        v2 = self.pop()
+        if i=='/':
+          self.push(str(eval(v2 + i*2 + v1)))
         else:
-            b = int(self.pop())
-            a = int(self.pop())
-            
-            if char == "+":
-                result = a + b
-            elif char == "-":
-                result = a - b
-            elif char == '*':
-                result = a * b
-            elif char == '/':
-                result = a / b
-            
-            self.push(result)
-    
-    return int(self.stack[0])
-
+          self.push(str(eval(v2 + i + v1)))
+    return self.pop()
 
 # Do not change the following code
 postfix_expression = input()  # Read postfix expression
@@ -114,4 +109,3 @@ if evaluate.validate_postfix_expression(tokens):
     print(evaluate.evaluate_postfix_expression(tokens))
 else:
     print('Invalid postfix expression')
-        return False
