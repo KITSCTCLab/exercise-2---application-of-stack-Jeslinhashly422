@@ -8,12 +8,10 @@ class Evaluate:
     # Write your code here
 
 
-  def __init__(self, size):
+  def _init_(self, size):
     """Inits Evaluate with top, size_of_stack and stack.
     Arguments:
-      top:An integer which points to the top most element in the stack.
-      size_of_stack: An integer which represents size of stack.
-      stack: A list which maintians the elements of stack.
+      size_of_stack: An integer to set the size of stack.
     """
     self.top = -1
     self.size_of_stack = size
@@ -27,6 +25,9 @@ class Evaluate:
       True if it is empty, else returns False.
     """
       # Write your code here
+    if len(self.stack) == 0:
+        return True
+    else:
 
 
   def pop(self):
@@ -36,6 +37,9 @@ class Evaluate:
       The data which is popped out if the stack is not empty.
     """
     # Write your code here
+    if len(self.stack) > 0:
+        x = self.stack.pop()
+        return x
 
 
   def push(self, operand):
@@ -45,6 +49,7 @@ class Evaluate:
       operand: The operand to be pushed.
     """
     # Write your code here
+    self.stack.append(operand)
 
 
   def validate_postfix_expression(self, expression):
@@ -56,6 +61,17 @@ class Evaluate:
       True if the expression is valid, else returns False.
     """
     # Write your code here
+    value = True
+    
+    valid = ['+','-','*','/']
+    
+    for char in expression:
+        if char.isdigit or char in valid:
+            continue
+        else:
+            value = False
+    
+    return value
 
 
   def evaluate_postfix_expression(self, expression):
@@ -66,7 +82,28 @@ class Evaluate:
     Returns:
       The result of evaluated postfix expression.
     """
+    
     # Write your code here
+    
+    for char in expression:
+        if char.isdigit():
+            self.push(char)
+        else:
+            b = int(self.pop())
+            a = int(self.pop())
+            
+            if char == "+":
+                result = a + b
+            elif char == "-":
+                result = a - b
+            elif char == '*':
+                result = a * b
+            elif char == '/':
+                result = a / b
+            
+            self.push(result)
+    
+    return int(self.stack[0])
 
 
 # Do not change the following code
@@ -77,3 +114,4 @@ if evaluate.validate_postfix_expression(tokens):
     print(evaluate.evaluate_postfix_expression(tokens))
 else:
     print('Invalid postfix expression')
+        return False
